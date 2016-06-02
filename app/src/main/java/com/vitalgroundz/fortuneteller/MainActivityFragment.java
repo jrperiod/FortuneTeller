@@ -2,57 +2,62 @@ package com.vitalgroundz.fortuneteller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.R;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Created by manny on 5/11/16.
+ * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment{
+public class MainActivityFragment extends Fragment implements View.OnClickListener {
 
-    private static final int SPEECH_REQUEST_CODE = 0;
-    Button button;
+    TextView textView;
     FortuneReader fortuneReader;
 
-    public MainActivityFragment(){}
+    public MainActivityFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.activity_list_item, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        button = (Button) layout.findViewById(R.id.button1);
+        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.fragment_main, container, false);
 
-        String bang= "bang";
-        button.setText(bang);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("flow", "button clicked");
-                displaySpeechRecognizer();
-            }
-        });
-
+        textView = (TextView) layout.findViewById(R.id.textView);
+        textView.setOnClickListener(this);
 
         return layout;
-        //return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.textView:
+                Log.d("flow", "textview clicked");
+                displaySpeechRecognizer();
+                break;
+        }
+    }
+
+    private static final int SPEECH_REQUEST_CODE = 0;
 
     // Create an intent that can start the Speech Recognizer activity
     private void displaySpeechRecognizer() {
@@ -76,7 +81,7 @@ public class MainActivityFragment extends Fragment{
                 String spokenText = results.get(0);
 
                 fortuneReader = new FortuneReader(getActivity());
-                fortuneReader.startFortune(spokenText);
+                fortuneReader.readFortune(spokenText);
             } else {
                 Log.d("flow", "failure");
             }
@@ -84,6 +89,4 @@ public class MainActivityFragment extends Fragment{
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-
 }
